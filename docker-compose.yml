@@ -22,34 +22,10 @@ services:
     container_name: iceberg-rest
     networks:
       iceberg_net:
-    depends_on:
-      postgres:
-        condition: service_healthy
     ports:
       - 8181:8181
-  
-  postgres:
-    image: 'postgres:11'
-    container_name: postgres
-    hostname: postgres
-    expose:
-      - '5432'
-    ports:
-      - '5432:5432'
-    environment:
-      POSTGRES_USER: experient
-      POSTGRES_PASSWORD: experient
-      POSTGRES_DB: data_catalog
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "data_catalog"]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
     volumes:
-      - ${PGDATA_DIR}:/var/lib/postgresql/data
-    networks:
-      - iceberg_net
+      - ${CATALOG_DB_DIR}:/home/iceberg
 
 networks:
   iceberg_net:
